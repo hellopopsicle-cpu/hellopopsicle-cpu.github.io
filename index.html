@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Aztec Empire: Trade or Takeover?</title>
+    <title>Aztec Empire (Tenochtitlan): Trade or Takeover?</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         html, body {
@@ -163,8 +163,7 @@
         // --- Game Data ---
         const storyNodes = [
             {
-                context: "Cortés describes the arrival of the Spanish in the Yucatán Peninsula and their subsequent journey to Tenochtitlan. He emphasizes the wealth and grandeur of the Aztec Empire.",
-                prompt: "Spanish ships have anchored near our shores. Their leader, Hernán Cortés, claims to be an emissary of the Spanish crown. How do you respond?",
+                prompt: ". Their leader, Hernán Cortés, claims to be an emissary of the Spanish crown. How do you respond?",
                 choices: [
                     {
                         text: "A) Welcome them with gifts to establish peaceful relations. (+gold, -soldiers)",
@@ -181,7 +180,6 @@
                 ]
             },
             {
-                context: "Cortés writes about the tribute demanded by the Spanish from the indigenous peoples, including gold and other valuables.",
                 prompt: "The Spanish have requested tribute in gold and other valuables. How do you respond?",
                 choices: [
                     {
@@ -199,7 +197,6 @@
                 ]
             },
             {
-                context: "Cortés mentions the Spanish missionaries' efforts to convert the indigenous peoples to Christianity.",
                 prompt: "Spanish missionaries seek to convert our people to Christianity. How do you respond?",
                 choices: [
                     {
@@ -217,7 +214,6 @@
                 ]
             },
             {
-                context: "Cortés describes the rebellion of the indigenous allies and the challenges faced by the Spanish forces.",
                 prompt: "Rebellions have erupted among our allies. How do you respond?",
                 choices: [
                     {
@@ -328,7 +324,7 @@
             document.getElementById('gameContainer').innerHTML = `
                 <h1>Aztec Empire: Trade or Takeover?</h1>
                 <div class="intro">
-                    During this activity, you will be making decisions for Moctezuma, who was the last leader of Tenochtitlan, and “experience” the problems he faced. These decisions will be based on the interactions Moctezuma had with Cortés. Each decision made will reflect on the status of gold, food, and soldiers of the Aztec people. After, a quote from Cortés’ letter will explain the events that actually took place and the decisions Moctezuma had to make. Your goal is to improve from the decisions Moctezuma made and analyze some reasons why they could’ve led to his defeat. Good luck and remember you will be quizzed on your ability to analyze what’s happening!
+                    You are an advisor to the emperor of Tenochtitlan. In 1519, strange men from across the sea arrive. Their leader, Hernán Cortés, brings new technologies, deadly diseases, and a hunger for gold. Your choices will determine the fate of the Aztec Empire.
                 </div>
                 <button class="start-btn" id="startBtn">Start Game</button>
             `;
@@ -373,13 +369,13 @@
                     stats.food += choice.effects.food;
                     stats.soldiers += choice.effects.soldiers;
                     playerChoices.push(choice.text);
-                    // Show fact, then next step
-                    document.getElementById('fact').innerText = choice.fact;
-                    document.getElementById('choices').innerHTML = '';
-                    setTimeout(() => {
+                    // Show only the historical fact and a Next button
+                    document.getElementById('fact').innerHTML = `<b>What did Moctezuma actually do?</b> ${choice.fact}`;
+                    document.getElementById('choices').innerHTML = '<button class="next-btn" id="nextBtn">Next</button>';
+                    document.getElementById('nextBtn').onclick = () => {
                         storyStep++;
                         renderGame();
-                    }, 2500);
+                    };
                 };
                 document.getElementById('choices').appendChild(btn);
             });
@@ -438,7 +434,7 @@
                     setTimeout(() => {
                         quizStep++;
                         renderQuiz();
-                    }, 2500);
+                    }, 4000);
                 };
                 document.getElementById('quizChoices').appendChild(btn);
             });
