@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aztec Empire: Trade or Takeover?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5e9d4 0%, #e0cfa9 100%);
+            min-height: 100vh;
+            color: #2d2d2d;
+        }
+        .container {
+            max-width: 500px;
+            margin: 32px auto;
+            background: rgba(255,251,230,0.98);
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+            padding: 28px 18px 24px 18px;
+            min-height: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #7c3f00;
+            margin-bottom: 8px;
+            font-size: 2em;
+        }
+        .intro {
+            font-size: 1.1em;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .start-btn, .choice-btn, .next-btn, .restart-btn {
+            display: block;
+            width: 100%;
+            margin: 16px 0 0 0;
+            background: #7c3f00;
+            color: #fffbe6;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 0;
+            font-size: 1.1em;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .start-btn:hover, .choice-btn:hover, .next-btn:hover, .restart-btn:hover {
+            background: #a86b1c;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 18px 0 18px 0;
+            font-size: 1.1em;
+            background: #e0cfa9;
+            border-radius: 8px;
+            padding: 8px 12px;
+        }
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: bold;
+        }
+        .story {
+            font-size: 1.13em;
+            margin-bottom: 16px;
+            min-height: 48px;
+        }
+        .fact {
+            background: #e0cfa9;
+            border-left: 4px solid #7c3f00;
+            padding: 10px 14px;
+            margin-bottom: 18px;
+            border-radius: 6px;
+            font-size: 0.98em;
+        }
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .ending {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #7c3f00;
+            margin-top: 24px;
+            text-align: center;
+        }
+        .ending-reflection {
+            font-size: 1em;
+            color: #444;
+            margin: 12px 0 0 0;
+            text-align: center;
+        }
+        .quiz-section {
+            margin-top: 32px;
+            background: #f5e9d4;
+            border-radius: 8px;
+            padding: 18px 16px;
+        }
+        .quiz-q {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .quiz-choices {
+            margin-bottom: 16px;
+        }
+        .quiz-choice-btn {
+            background: #7c3f00;
+            color: #fffbe6;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-right: 8px;
+            margin-bottom: 6px;
+            transition: background 0.2s;
+        }
+        .quiz-choice-btn:hover {
+            background: #a86b1c;
+        }
+        .quiz-feedback {
+            margin-bottom: 10px;
+            color: #7c3f00;
+        }
+        .quiz-score {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #7c3f00;
+            margin-top: 12px;
+            text-align: center;
+        }
+        .summary {
+            margin-top: 24px;
+            background: #e0cfa9;
+            border-radius: 8px;
+            padding: 16px 12px;
+            font-size: 1.05em;
+        }
+        @media (max-width: 600px) {
+            .container { max-width: 98vw; padding: 10vw 2vw; }
+            .stats { font-size: 1em; }
+            .story, .fact, .ending, .ending-reflection, .quiz-section, .summary { font-size: 1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="gameContainer">
+        <!-- Content will be injected by JS -->
+    </div>
+    <!-- Sound effects -->
+    <audio id="clickSound" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfa4b3c.mp3"></audio>
+    <audio id="statSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9b7b3b.mp3"></audio>
+    <audio id="bgMusic" src="https://cdn.pixabay.com/audio/2022/10/16/audio_12b6b1e7e2.mp3" loop></audio>
+    <script>
+        // --- Game Data ---
+        const storyNodes = [
+            {
+                context: "Cortés describes the arrival of the Spanish in the Yucatán Peninsula and their subsequent journey to Tenochtitlan. He emphasizes the wealth and grandeur of the Aztec Empire.",
+                prompt: "Spanish ships have anchored near our shores. Their leader, Hernán Cortés, claims to be an emissary of the Spanish crown. How do you respond?",
+                choices: [
+                    {
+                        text: "A) Welcome them with gifts to establish peaceful relations. (+gold, -soldiers)",
+                        effects: { gold: +10, food: 0, soldiers: -10 },
+                        fact: "Cortés reported that the Spanish were astonished by the wealth and sophistication of the Aztec capital, Tenochtitlan.",
+                        sound: "goldSound"
+                    },
+                    {
+                        text: "B) Prepare defenses and send scouts to assess their intentions. (+soldiers, -gold)",
+                        effects: { gold: -10, food: 0, soldiers: +10 },
+                        fact: "Cortés reported that the Spanish were astonished by the wealth and sophistication of the Aztec capital, Tenochtitlan.",
+                        sound: "soldierSound"
+                    }
+                ]
+            },
+            {
+                context: "Cortés writes about the tribute demanded by the Spanish from the indigenous peoples, including gold and other valuables.",
+                prompt: "The Spanish have requested tribute in gold and other valuables. How do you respond?",
+                choices: [
+                    {
+                        text: "A) Comply with their demands to avoid conflict. (+gold, -food)",
+                        effects: { gold: +10, food: -10, soldiers: 0 },
+                        fact: "Cortés emphasized the vast riches of the Aztec Empire in his letters, aiming to impress the Spanish crown.",
+                        sound: "goldSound"
+                    },
+                    {
+                        text: "B) Refuse and prepare for potential retaliation. (+soldiers, -gold)",
+                        effects: { gold: -10, food: 0, soldiers: +10 },
+                        fact: "Cortés emphasized the vast riches of the Aztec Empire in his letters, aiming to impress the Spanish crown.",
+                        sound: "soldierSound"
+                    }
+                ]
+            },
+            {
+                context: "Cortés mentions the Spanish missionaries' efforts to convert the indigenous peoples to Christianity.",
+                prompt: "Spanish missionaries seek to convert our people to Christianity. How do you respond?",
+                choices: [
+                    {
+                        text: "A) Allow them to preach and establish missions. (+gold, -soldiers)",
+                        effects: { gold: +10, food: 0, soldiers: -10 },
+                        fact: "Cortés portrayed the Spanish as bringing Christianity to the 'heathen' lands, framing the conquest as a religious mission.",
+                        sound: "goldSound"
+                    },
+                    {
+                        text: "B) Resist their efforts and protect our traditions. (+soldiers, -gold)",
+                        effects: { gold: -10, food: 0, soldiers: +10 },
+                        fact: "Cortés portrayed the Spanish as bringing Christianity to the 'heathen' lands, framing the conquest as a religious mission.",
+                        sound: "soldierSound"
+                    }
+                ]
+            },
+            {
+                context: "Cortés describes the rebellion of the indigenous allies and the challenges faced by the Spanish forces.",
+                prompt: "Rebellions have erupted among our allies. How do you respond?",
+                choices: [
+                    {
+                        text: "A) Use resources to quell the rebellion. (-food, +soldiers)",
+                        effects: { gold: 0, food: -10, soldiers: +10 },
+                        fact: "Cortés faced numerous challenges from indigenous groups, leading to alliances and conflicts that shaped the conquest.",
+                        sound: "soldierSound"
+                    },
+                    {
+                        text: "B) Offer bribes to rebel leaders to restore peace. (-gold, +food)",
+                        effects: { gold: -10, food: +10, soldiers: 0 },
+                        fact: "Cortés faced numerous challenges from indigenous groups, leading to alliances and conflicts that shaped the conquest.",
+                        sound: "goldSound"
+                    }
+                ]
+            }
+        ];
+
+        const endings = [
+            {
+                id: "victory",
+                title: "Victory in Adaptation",
+                condition: stats => stats.gold >= 20 && stats.food >= 0 && stats.soldiers >= 0,
+                narrative: "Through careful negotiation and adaptation, you preserved much of your people's independence and culture, even as the world changed around you.",
+                reflection: "History is shaped by those who adapt. The Aztecs who survived did so by blending old and new ways."
+            },
+            {
+                id: "heroic",
+                title: "Heroic Defeat",
+                condition: stats => stats.soldiers >= 30 && (stats.gold < 0 || stats.food < 0),
+                narrative: "Your warriors fought bravely, but hunger and poverty weakened your resistance. The city fell, but your courage is remembered.",
+                reflection: "Sometimes, values and bravery are not enough against overwhelming odds and new forces."
+            },
+            {
+                id: "crushed",
+                title: "Crushed by Conquest",
+                condition: stats => stats.gold < 0 && stats.food < 0 && stats.soldiers < 0,
+                narrative: "The empire collapsed under the weight of betrayal, disease, and foreign greed. The city was lost, and your people suffered.",
+                reflection: "The Spanish conquest was fueled by a hunger for gold and land, but also by disease and division."
+            }
+        ];
+
+        const quizQuestions = [
+            {
+                q: "What was the capital of the Aztec Empire?",
+                choices: ["Cuzco", "Tenochtitlan", "Lima", "Veracruz"],
+                answer: 1,
+                explanation: "Correct! Tenochtitlan was a massive city built on a lake in central Mexico."
+            },
+            {
+                q: "What was Cortés mainly seeking from the Aztecs?",
+                choices: ["Peace", "Art", "Gold", "Knowledge"],
+                answer: 2,
+                explanation: "Correct! The Spanish crown and explorers were primarily motivated by profit."
+            },
+            {
+                q: "What disease devastated the Aztec population after Spanish arrival?",
+                choices: ["Malaria", "Influenza", "Tuberculosis", "Smallpox"],
+                answer: 3,
+                explanation: "Correct! Smallpox killed large numbers of Aztecs, weakening resistance."
+            },
+            {
+                q: "What is the encomienda system?",
+                choices: ["A peace treaty", "A type of weapon", "A forced labor system", "A food storage method"],
+                answer: 2,
+                explanation: "Correct! It gave Spanish settlers control over Indigenous labor."
+            },
+            {
+                q: "Why is the fall of Tenochtitlan important in Atlantic World history?",
+                choices: [
+                    "It stopped trade",
+                    "It marked the end of slavery",
+                    "It began the process of colonizing the Americas",
+                    "It ended war in Europe"
+                ],
+                answer: 2,
+                explanation: "Correct! The conquest of Tenochtitlan was a major step in Spanish imperialism."
+            }
+        ];
+
+        // --- Game State ---
+        let stats = { gold: 10, food: 10, soldiers: 10 };
+        let storyStep = 0;
+        let playerChoices = [];
+        let quizStep = 0;
+        let quizScore = 0;
+        let endingId = null;
+
+        // --- Sound ---
+        function playSound(id) {
+            const audio = document.getElementById(id);
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play();
+            }
+        }
+        // Optionally, start background music
+        function startMusic() {
+            const bg = document.getElementById('bgMusic');
+            if (bg && bg.paused) {
+                bg.volume = 0.2;
+                bg.play();
+            }
+        }
+
+        // --- UI Rendering ---
+        function renderWelcome() {
+            document.getElementById('gameContainer').innerHTML = 
+                <h1>Aztec Empire: Trade or Takeover?</h1>
+                <div class="intro">
+                    You are an advisor to the emperor of Tenochtitlan. In 1519, strange men from across the sea arrive. Their leader, Hernán Cortés, brings new technologies, deadly diseases, and a hunger for gold. Your choices will determine the fate of the Aztec Empire.
+                </div>
+                <button class="start-btn" id="startBtn">Start Game</button>
+            ;
+            document.getElementById('startBtn').onclick = () => {
+                playSound('clickSound');
+                startMusic();
+                renderGame();
+            };
+        }
+
+        function renderStats() {
+            return 
+                <div class="stats">
+                    <span class="stat">🪙 GOLD: ${stats.gold}</span>
+                    <span class="stat">🌽 FOOD: ${stats.food}</span>
+                    <span class="stat">🗡️ SOLDIERS: ${stats.soldiers}</span>
+                </div>
+            ;
+        }
+
+        function renderGame() {
+            if (storyStep >= storyNodes.length) {
+                renderEnding();
+                return;
+            }
+            const node = storyNodes[storyStep];
+            document.getElementById('gameContainer').innerHTML = 
+                <h1>Aztec Empire: Trade or Takeover?</h1>
+                ${renderStats()}
+                <div class="story">${node.prompt}</div>
+                <div class="choices" id="choices"></div>
+                <div class="fact" id="fact"></div>
+            ;
+            node.choices.forEach((choice, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "choice-btn";
+                btn.innerText = choice.text;
+                btn.onclick = () => {
+                    playSound(choice.sound);
+                    // Apply effects
+                    stats.gold += choice.effects.gold;
+                    stats.food += choice.effects.food;
+                    stats.soldiers += choice.effects.soldiers;
+                    playerChoices.push(choice.text);
+                    // Show fact, then next step
+                    document.getElementById('fact').innerText = choice.fact;
+                    document.getElementById('choices').innerHTML = '';
+                    setTimeout(() => {
+                        storyStep++;
+                        renderGame();
+                    }, 2500);
+                };
+                document.getElementById('choices').appendChild(btn);
+            });
+        }
+
+        function getEnding() {
+            // Check endings in order of priority
+            if (endings[0].condition(stats)) return endings[0];
+            if (endings[1].condition(stats)) return endings[1];
+            return endings[2];
+        }
+
+        function renderEnding() {
+            const ending = getEnding();
+            endingId = ending.id;
+            document.getElementById('gameContainer').innerHTML = 
+                <h1>${ending.title}</h1>
+                ${renderStats()}
+                <div class="ending">${ending.narrative}</div>
+                <div class="ending-reflection">${ending.reflection}</div>
+                <button class="next-btn" id="quizBtn">Take the Quiz</button>
+            ;
+            document.getElementById('quizBtn').onclick = () => {
+                playSound('clickSound');
+                renderQuiz();
+            };
+        }
+
+        function renderQuiz() {
+            if (quizStep >= quizQuestions.length) {
+                renderFinalScreen();
+                return;
+            }
+            const q = quizQuestions[quizStep];
+            document.getElementById('gameContainer').innerHTML = 
+                <h1>Quiz: What Did You Learn?</h1>
+                <div class="quiz-section">
+                    <div class="quiz-q">${q.q}</div>
+                    <div class="quiz-choices" id="quizChoices"></div>
+                    <div class="quiz-feedback" id="quizFeedback"></div>
+                </div>
+            ;
+            q.choices.forEach((choice, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "quiz-choice-btn";
+                btn.innerText = choice;
+                btn.onclick = () => {
+                    playSound('clickSound');
+                    if (idx === q.answer) {
+                        quizScore++;
+                        document.getElementById('quizFeedback').innerHTML = <b>Correct!</b> ${q.explanation};
+                    } else {
+                        document.getElementById('quizFeedback').innerHTML = <b>Incorrect.</b> ${q.explanation};
+                    }
+                    document.getElementById('quizChoices').innerHTML = '';
+                    setTimeout(() => {
+                        quizStep++;
+                        renderQuiz();
+                    }, 2500);
+                };
+                document.getElementById('quizChoices').appendChild(btn);
+            });
+        }
+
+        function renderFinalScreen() {
+            document.getElementById('gameContainer').innerHTML = 
+                <h1>Game Summary</h1>
+                <div class="summary">
+                    <b>Your Choices:</b>
+                    <ol>${playerChoices.map(c => <li>${c}</li>).join('')}</ol>
+                    <b>Ending:</b> ${endings.find(e => e.id === endingId).title}<br>
+                    <b>Quiz Score:</b> ${quizScore} / ${quizQuestions.length}
+                </div>
+                <div class="ending-reflection" style="margin-top:18px;">
+                    Thank you for exploring the history of Tenochtitlan!<br>
+                    <span style="font-size:0.95em;">History is shaped by choices—yours and those who came before you.</span>
+                </div>
+                <button class="restart-btn" id="restartBtn">Play Again</button>
+            ;
+            document.getElementById('restartBtn').onclick = () => {
+                playSound('clickSound');
+                // Reset game state
+                stats = { gold: 10, food: 10, soldiers: 10 };
+                storyStep = 0;
+                playerChoices = [];
+                quizStep = 0;
+                quizScore = 0;
+                endingId = null;
+                renderWelcome();
+            };
+        }
+
+        // --- Start Game ---
+        renderWelcome();
+    </script>
+</body>
+</html>
