@@ -163,69 +163,70 @@
         // --- Game Data ---
         const storyNodes = [
             {
-                prompt: ". Their leader, Hernán Cortés, claims to be an emissary of the Spanish crown. How do you respond?",
+                prompt: "Many foreign people entered your land and came to see you. Their leader, Cortés, greeted you by putting “a collar of pearls and glass diamonds” around your neck. You give him a necklace of seashells and let him enter your home, he seems fascinated by the wealth of your kingdom. (Pages 85-89).",
                 choices: [
                     {
-                        text: "A) Welcome them with gifts to establish peaceful relations. (+gold, -soldiers)",
-                        effects: { gold: +10, food: 0, soldiers: -10 },
-                        fact: "Cortés reported that the Spanish were astonished by the wealth and sophistication of the Aztec capital, Tenochtitlan.",
-                        sound: "goldSound"
+                        text: "A) Welcome Cortés and his people with gifts and valuable items to maintain a peaceful relationship with them. (-gold, +soldiers)",
+                        effects: { gold: -10, food: 0, soldiers: +10 },
+                        fact: "“He returned with many and various jewels of gold and silver, feather work, and five or six thousand pieces of cotton cloth, very rich and of varied texture and finish.”",
+                        sound: "soldierSound"
                     },
                     {
-                        text: "B) Prepare defenses and send scouts to assess their intentions. (+soldiers, -gold)",
+                        text: "B) Prepare defenses and send out scouts to understand the intentions of Cortés and his people before welcoming them. (-soldiers, +gold)",
                         effects: { gold: -10, food: 0, soldiers: +10 },
-                        fact: "Cortés reported that the Spanish were astonished by the wealth and sophistication of the Aztec capital, Tenochtitlan.",
-                        sound: "soldierSound"
+                        fact: "“He returned with many and various jewels of gold and silver, feather work, and five or six thousand pieces of cotton cloth, very rich and of varied texture and finish.”",
+                        sound: "goldSound"
                     }
                 ]
             },
             {
-                prompt: "The Spanish have requested tribute in gold and other valuables. How do you respond?",
+                prompt: "Some of Cortés’ people were attacked by your own. Cortés is suspicious of you for being behind this. He asks you if he could keep you in his custody for questioning. He reassures you that you will not be treated as a prisoner and still maintain power over your people. Cortés promises he and his people will protect you from any harm. (Pages 91-94).",
                 choices: [
                     {
-                        text: "A) Comply with their demands to avoid conflict. (+gold, -food)",
-                        effects: { gold: +10, food: -10, soldiers: 0 },
-                        fact: "Cortés emphasized the vast riches of the Aztec Empire in his letters, aiming to impress the Spanish crown.",
-                        sound: "goldSound"
-                    },
-                    {
-                        text: "B) Refuse and prepare for potential retaliation. (+soldiers, -gold)",
-                        effects: { gold: -10, food: 0, soldiers: +10 },
-                        fact: "Cortés emphasized the vast riches of the Aztec Empire in his letters, aiming to impress the Spanish crown.",
-                        sound: "soldierSound"
-                    }
-                ]
-            },
-            {
-                prompt: "Spanish missionaries seek to convert our people to Christianity. How do you respond?",
-                choices: [
-                    {
-                        text: "A) Allow them to preach and establish missions. (+gold, -soldiers)",
-                        effects: { gold: +10, food: 0, soldiers: -10 },
-                        fact: "Cortés portrayed the Spanish as bringing Christianity to the 'heathen' lands, framing the conquest as a religious mission.",
-                        sound: "goldSound"
-                    },
-                    {
-                        text: "B) Resist their efforts and protect our traditions. (+soldiers, -gold)",
-                        effects: { gold: -10, food: 0, soldiers: +10 },
-                        fact: "Cortés portrayed the Spanish as bringing Christianity to the 'heathen' lands, framing the conquest as a religious mission.",
-                        sound: "soldierSound"
-                    }
-                ]
-            },
-            {
-                prompt: "Rebellions have erupted among our allies. How do you respond?",
-                choices: [
-                    {
-                        text: "A) Use resources to quell the rebellion. (-food, +soldiers)",
+                        text: "A) Cortés and his people have advanced weapons and tools, you're afraid of what will happen if you go against him. Since you won’t lose respect from your people, you agree. (+soldiers, -food)",
                         effects: { gold: 0, food: -10, soldiers: +10 },
-                        fact: "Cortés faced numerous challenges from indigenous groups, leading to alliances and conflicts that shaped the conquest.",
+                        fact: "“He expressed his willingness to go with me. He immediately gave orders to have the apartment he wished to occupy put in order for his use”",
+                        sound: "goldSound"
+                    },
+                    {
+                        text: "B) You don’t trust Cortés and believe he wants to take advantage of you and your power. You assure him you aren’t behind the attacks and won’t let him take you into custody. (+soldiers, -gold)",
+                        effects: { gold: -10, food: 0, soldiers: +10 },
+                        fact: "“He expressed his willingness to go with me. He immediately gave orders to have the apartment he wished to occupy put in order for his use”",
+                        sound: "soldierSound"
+                    }
+                ]
+            },
+            {
+                prompt: "Cortés tells you about the greatness of the King, and that he’s his representative. Many Aztec communities resent you and believe your evil. Cortés offers to rule your kingdom in the name of his king. (104-107).",
+                choices: [
+                    {
+                        text: "A) You believe that you’ll soon be overthrown by the Aztec people and Cortés. It’s a better decision to give up your throne to Cortés, his king, to avoid violence and maintain peace. (+gold, -soldiers)",
+                        effects: { gold: +10, food: 0, soldiers: -10 },
+                        fact: "“Hereafter, instead of regarding as your sovereign, you will recognize and obey that great. king, as he is our natural ruler, and receive this his captain in place of him”",
+                        sound: "goldSound"
+                    },
+                    {
+                        text: "B) You continue to reign over your people and decline Cortés’ offer to become King. You let him know you respect him and his King, but take pride in your role as the leader of the Aztecs. (+soldiers, -gold)",
+                        effects: { gold: -10, food: 0, soldiers: +10 },
+                        fact: "“Hereafter, instead of regarding as your sovereign, you will recognize and obey that great. king, as he is our natural ruler, and receive this his captain in place of him”",
+                        sound: "soldierSound"
+                    }
+                ]
+            },
+            {
+                prompt: " Cortés took down an idol from the temple and replaced it with paintings of men and women. He insisted that our people were “deceived in expecting any favors from idols” and talked about his own religion. He asked if he could change the temples to follow the religion of himself and the king. (Pages 114-118).",
+                choices: [
+                    {
+                        text: "A) You allow Cortés to take down and replace your idols, his will and the will of the king can help improve your peoples way of living. (-food, +soldiers)",
+                        effects: { gold: 0, food: -10, soldiers: +10 },
+                        fact: " “Moctezuma and many of the principal citizens remained with me until I had removed the idols, purified the chapels, and placed the images in them”
+",
                         sound: "soldierSound"
                     },
                     {
-                        text: "B) Offer bribes to rebel leaders to restore peace. (-gold, +food)",
+                        text: "B) You tell Cortés that you and your people won’t change who you believe in and that the idols are sacred. You don’t want to upset your people and disrespect your religion. (-gold, +food)",
                         effects: { gold: -10, food: +10, soldiers: 0 },
-                        fact: "Cortés faced numerous challenges from indigenous groups, leading to alliances and conflicts that shaped the conquest.",
+                        fact: " “Moctezuma and many of the principal citizens remained with me until I had removed the idols, purified the chapels, and placed the images in them”",
                         sound: "goldSound"
                     }
                 ]
@@ -237,22 +238,22 @@
                 id: "victory",
                 title: "Victory in Adaptation",
                 condition: stats => stats.gold >= 20 && stats.food >= 0 && stats.soldiers >= 0,
-                narrative: "Through careful negotiation and adaptation, you preserved much of your people's independence and culture, even as the world changed around you.",
-                reflection: "History is shaped by those who adapt. The Aztecs who survived did so by blending old and new ways."
+                narrative: "Through negotiation, adaptation, and strategical thinking, you preserved your people's independence and culture! Well done!",
+                reflection: "The ending of Moctezuma's reign was different then the one you chose for him. Cortés and his people ended up taking advantage of the Aztecs and Moctezuma using violent methods. They eventually succeeded in taking full control of the Aztec empire."
             },
             {
                 id: "heroic",
                 title: "Heroic Defeat",
                 condition: stats => stats.soldiers >= 30 && (stats.gold < 0 || stats.food < 0),
-                narrative: "Your warriors fought bravely, but hunger and poverty weakened your resistance. The city fell, but your courage is remembered.",
-                reflection: "Sometimes, values and bravery are not enough against overwhelming odds and new forces."
+                narrative: "Your protected your people and your country and value your beliefs, you won't back down when people try taking advantage of you. But, your resistance weakend over time as you ran out of resources. Tenochtitland fell, but your courage is remembered.",
+                reflection: "The ending of Moctezuma's reign was different then the one you chose for him. Cortés and his people ended up taking advantage of the Aztecs and Moctezuma using violent methods. They eventually succeeded in taking full control of the Aztec empire."
             },
             {
                 id: "crushed",
                 title: "Crushed by Conquest",
                 condition: stats => stats.gold < 0 && stats.food < 0 && stats.soldiers < 0,
-                narrative: "The empire collapsed under the weight of betrayal, disease, and foreign greed. The city was lost, and your people suffered.",
-                reflection: "The Spanish conquest was fueled by a hunger for gold and land, but also by disease and division."
+                narrative: "You gave into the beliefs and ideas that Cortés and his people had. You feared the cost of standing up for your people, but in the end, Tenochtitland fell.",
+                reflection: "The ending of Moctezuma's reign was similar to the one you chose for him. Cortés and his people ended up taking advantage of the Aztecs and Moctezuma using violent methods. They eventually succeeded in taking full control of the Aztec empire."
             }
         ];
 
@@ -324,7 +325,8 @@
             document.getElementById('gameContainer').innerHTML = `
                 <h1>Aztec Empire: Trade or Takeover?</h1>
                 <div class="intro">
-                    You are an advisor to the emperor of Tenochtitlan. In 1519, strange men from across the sea arrive. Their leader, Hernán Cortés, brings new technologies, deadly diseases, and a hunger for gold. Your choices will determine the fate of the Aztec Empire.
+                  During this activity, you will be making decisions for Moctezuma, who was the last leader of Tenochtitlan, and “experience” the problems he faced. These decisions will be based on the interactions Moctezuma had with Cortés. Each decision made will reflect on the status of gold, food, and soldiers of the Aztec people. After, a quote from Cortés’ letter will explain the events that actually took place and the decisions Moctezuma had to make. Your goal is to improve from the decisions Moctezuma made and analyze some reasons why they could’ve led to his defeat. Good luck and remember you will be quizzed on your ability to analyze what’s happening!
+
                 </div>
                 <button class="start-btn" id="startBtn">Start Game</button>
             `;
